@@ -76,7 +76,7 @@ class _StudentListState extends State<StudentList> {
                     width: width,
                     height: height,
                     fontSize: 18,
-                    title: "SIGN UP",
+                    title: "Publish All results!",
                     click: () {}),
               ),
             ),

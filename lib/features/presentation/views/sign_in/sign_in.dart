@@ -212,13 +212,20 @@ class _SignInState extends State<SignIn> {
                       fontSize: 18,
                       title: "SIGN IN",
                       click: () async {
-                        if (_formKey.currentState!.validate()) {
-                          User? user = await loginUsingEmailPassword(
-                            email: email.text.trim(),
-                            password: password.text.trim(),
-                            context: context,
-                          );
-                        }
+
+
+                        Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => const AdminHome(),
+                        ));
+
+
+                        // if (_formKey.currentState!.validate()) {
+                        //   User? user = await loginUsingEmailPassword(
+                        //     email: email.text.trim(),
+                        //     password: password.text.trim(),
+                        //     context: context,
+                        //   );
+                        // }
                       }),
                 ),
                 SizedBox(
