@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:result_sheet_system/core/utils/app_colors.dart';
+import 'package:result_sheet_system/features/presentation/views/ar_register/ar_registar.dart';
+import 'package:result_sheet_system/features/presentation/views/sign_in/sign_in.dart';
+import 'package:result_sheet_system/features/presentation/views/student_register/student_register.dart';
 import 'package:result_sheet_system/features/presentation/widgets/default_button.dart';
 
 class WelcomePage extends StatefulWidget {
@@ -39,7 +42,9 @@ class _WelcomePageState extends State<WelcomePage> {
                       height: height,
                       fontSize: 18,
                       title: "SIGN IN",
-                      click: () {}),
+                      click: () {
+                        Navigator.of(context).push(MaterialPageRoute(builder: (context) => const SignIn(),));
+                      }),
                 ),
                 Padding(
                   padding: const EdgeInsets.only(top: 20.0),
@@ -48,7 +53,10 @@ class _WelcomePageState extends State<WelcomePage> {
                       height: height,
                       fontSize: 18,
                       title: "SIGN UP - AR",
-                      click: () {}),
+                      click: () {
+                        Navigator.of(context).push(MaterialPageRoute(builder: (context) => const ArRegister(),));
+
+                      }),
                 ),
                 Padding(
                   padding: const EdgeInsets.only(top: 20.0),
@@ -57,7 +65,10 @@ class _WelcomePageState extends State<WelcomePage> {
                       height: height,
                       fontSize: 18,
                       title: "SIGN UP - STUDENT",
-                      click: () {}),
+                      click: () {
+                        Navigator.of(context).push(MaterialPageRoute(builder: (context) => const StudentRegister(),));
+
+                      }),
                 ),
               ],
             ),
