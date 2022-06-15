@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:result_sheet_system/features/data/datasources/dataSources.dart';
 import 'package:result_sheet_system/features/presentation/views/admin_panel/student_list/student_list.dart';
 import 'package:result_sheet_system/features/presentation/views/sign_in/sign_in.dart';
 import 'package:result_sheet_system/features/presentation/views/welcome_page/welcome_page.dart';
@@ -20,10 +21,14 @@ void main() async {
     "appId": "1:937607523491:web:b1d97eae184be691322316",
     "measurementId": "G-MM7SJPBB72"
   };
-  FirebaseApp app = await Firebase.initializeApp(
-      options: FirebaseOptions.fromMap(firebaseConfig));
+  FirebaseApp app = await Firebase.initializeApp(options: FirebaseOptions.fromMap(firebaseConfig));
   debugPrint(app.name.toString());
   // debugPrint(FirebaseAuth.instance.currentUser!.email.toString());
+
+  if (FirebaseAuth.instance.currentUser != null) {
+    AppUser.appUser = FirebaseAuth.instance.currentUser;
+  }
+
   runApp(const MyApp());
 }
 

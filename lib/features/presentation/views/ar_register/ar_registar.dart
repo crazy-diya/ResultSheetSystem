@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:result_sheet_system/core/utils/app_colors.dart';
 import 'package:result_sheet_system/features/presentation/views/sign_in/sign_in.dart';
 import 'package:result_sheet_system/features/presentation/widgets/default_button.dart';
@@ -31,6 +32,10 @@ class _ArRegisterState extends State<ArRegister> {
             child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            Padding(
+              padding: const EdgeInsets.only(bottom: 80.0),
+              child: SvgPicture.asset("assets/images/seu_logo.svg", width: 200),
+            ),
             const Text(
               "REGISTRATION FORM FOR\nAR",
               style: TextStyle(

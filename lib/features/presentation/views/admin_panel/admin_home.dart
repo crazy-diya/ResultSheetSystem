@@ -1,9 +1,11 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_admin_scaffold/admin_scaffold.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:result_sheet_system/core/utils/app_colors.dart';
 import 'package:result_sheet_system/features/presentation/views/admin_panel/student_list/student_list.dart';
+import 'package:result_sheet_system/features/presentation/views/sign_in/sign_in.dart';
 
 class AdminHome extends StatefulWidget {
   static const String id = "admin_home";
@@ -15,7 +17,7 @@ class AdminHome extends StatefulWidget {
 }
 
 class _AdminHomeState extends State<AdminHome> {
-  Widget _selectedScreen = const StudentList(
+  late Widget _selectedScreen = const StudentList(
     year: "First Year",
     semester: "First Semester",
   );
@@ -101,7 +103,10 @@ class _AdminHomeState extends State<AdminHome> {
                       color: AppColors.wSecondaryColor,
                     )),
                 InkWell(
-                    onTap: () {},
+                    onTap: () async {
+                      await FirebaseAuth.instance.signOut();
+                      Navigator.of(context).push(MaterialPageRoute(builder: (context) => SignIn(),));
+                    },
                     child: SvgPicture.asset(
                       "assets/icons/ios-log-out.svg",
                       width: 20,
@@ -158,13 +163,14 @@ class _AdminHomeState extends State<AdminHome> {
             ),
           ]),
         ],
-        selectedRoute: "11",
         onSelected: (item) {
           currentScreen(item);
+
           // if (item.route != null) {
           //   Navigator.of(context).pushNamed(item.route!);
           // }
         },
+        selectedRoute: "11",
         // footer: Container(
         //   height: 50,
         //   width: double.infinity,

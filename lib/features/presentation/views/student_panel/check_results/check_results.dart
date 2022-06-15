@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:result_sheet_system/core/utils/app_colors.dart';
@@ -26,7 +27,8 @@ class _CheckResultsState extends State<CheckResults> {
     double height = MediaQuery.of(context).size.height;
     return Scaffold(
       body: Padding(
-        padding: const EdgeInsets.only(left: 32.0,right: 32.0,top: 32.0,bottom: 20.0),
+        padding: const EdgeInsets.only(
+            left: 32.0, right: 32.0, top: 32.0, bottom: 20.0),
         child: Stack(
           children: [
             Column(
@@ -37,6 +39,41 @@ class _CheckResultsState extends State<CheckResults> {
                     fontSize: 24,
                     fontWeight: FontWeight.bold,
                     color: AppColors.wPrimaryColor,
+                  ),
+                ),
+                Container(
+                  height: 500,
+                  width: 450,
+                  padding: EdgeInsets.all(25),
+                  child: ListView.builder(
+                    itemCount: 10,
+                    itemBuilder: (context, index) => Card(
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: const [
+                              Text(
+                                "Subject Name : ",
+                                style: TextStyle(
+                                    color: AppColors.wPrimaryColor,
+                                    fontSize: 15),
+                              ),
+                              Padding(
+                                padding: EdgeInsets.all(8.0),
+                                child: Text(
+                                  "A",
+                                  style: TextStyle(
+                                    fontSize: 24,
+                                    fontWeight: FontWeight.bold,
+                                    color: AppColors.wPrimaryColor,
+                                  ),
+                                ),
+                              ),
+                            ]),
+                      ),
+                    ),
                   ),
                 ),
                 Container(
