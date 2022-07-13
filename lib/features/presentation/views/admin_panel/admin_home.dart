@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_admin_scaffold/admin_scaffold.dart';
@@ -17,59 +18,84 @@ class AdminHome extends StatefulWidget {
 }
 
 class _AdminHomeState extends State<AdminHome> {
-  late Widget _selectedScreen = const StudentList(
-    year: "First Year",
-    semester: "First Semester",
+  bool studentRegistered11 = false;
+  bool studentRegistered12 = false;
+  bool studentRegistered21 = false;
+  bool studentRegistered22 = false;
+  bool studentRegistered31 = false;
+  bool studentRegistered32 = false;
+  bool studentRegistered41 = false;
+  bool studentRegistered42 = false;
+
+  bool loadedData = true;
+  Widget _selectedScreen = const Center(
+    child: Text("Go and Find!"),
   );
 
-  currentScreen(item) {
+  currentScreen(item) async {
     switch (item.route) {
       case "11":
         setState(() {
-          _selectedScreen =
-              StudentList(year: "First Year", semester: "First Semester");
+          _selectedScreen = studentRegistered11 == true
+              ? const StudentList(
+                  year: "First Year", semester: "First Semester")
+              : const Center(child: Text("Not Student Registered Yet!"));
         });
         break;
       case "12":
         setState(() {
-          _selectedScreen =
-              StudentList(year: "First Year", semester: "Second Semester");
+          _selectedScreen = studentRegistered12 == true
+              ? const StudentList(
+                  year: "First Year", semester: "Second Semester")
+              : const Center(child: Text("Not Student Registered Yet!"));
         });
         break;
       case "21":
         setState(() {
-          _selectedScreen =
-              StudentList(year: "Second Year", semester: "First Semester");
+          _selectedScreen = studentRegistered21 == true
+              ? const StudentList(
+                  year: "Second Year", semester: "First Semester")
+              : const Center(child: Text("Not Student Registered Yet!"));
         });
         break;
       case "22":
         setState(() {
-          _selectedScreen =
-              StudentList(year: "Second Year", semester: "Second Semester");
+          _selectedScreen = studentRegistered22 == true
+              ? const StudentList(
+                  year: "Second Year", semester: "Second Semester")
+              : const Center(child: Text("Not Student Registered Yet!"));
         });
         break;
       case "31":
         setState(() {
-          _selectedScreen =
-              StudentList(year: "Third Year", semester: "First Semester");
+          _selectedScreen = studentRegistered31 == true
+              ? const StudentList(
+                  year: "Third Year", semester: "First Semester")
+              : const Center(child: Text("Not Student Registered Yet!"));
         });
         break;
       case "32":
         setState(() {
-          _selectedScreen =
-              StudentList(year: "Third Year", semester: "Second Semester");
+          _selectedScreen = studentRegistered32 == true
+              ? const StudentList(
+                  year: "Third Year", semester: "Second Semester")
+              : const Center(child: Text("Not Student Registered Yet!"));
         });
         break;
       case "41":
         setState(() {
-          _selectedScreen =
-              StudentList(year: "Fourth Year", semester: "First Semester");
+          _selectedScreen = studentRegistered41 == true
+              ? const StudentList(
+                  year: "Fourth Year", semester: "First Semester")
+              : const Center(child: Text("Not Student Registered Yet!"));
         });
         break;
       case "42":
         setState(() {
-          _selectedScreen =
-              StudentList(year: "Fourth Year", semester: "Second Semester");
+          _selectedScreen = studentRegistered42 == true
+              ? const StudentList(
+                  year: "Fourth Year", semester: "Second Semester")
+              : const Center(child: Text("Not Student Registered Yet!"));
         });
         break;
     }
@@ -105,7 +131,9 @@ class _AdminHomeState extends State<AdminHome> {
                 InkWell(
                     onTap: () async {
                       await FirebaseAuth.instance.signOut();
-                      Navigator.of(context).push(MaterialPageRoute(builder: (context) => SignIn(),));
+                      Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => SignIn(),
+                      ));
                     },
                     child: SvgPicture.asset(
                       "assets/icons/ios-log-out.svg",
@@ -163,29 +191,198 @@ class _AdminHomeState extends State<AdminHome> {
             ),
           ]),
         ],
-        onSelected: (item) {
+        onSelected: (item) async {
+          currentScreen(item);
+
+          switch (item.route) {
+            case "11":
+              await FirebaseFirestore.instance
+                  .collection("Admin")
+                  .doc("First Year")
+                  .collection("First Semester")
+                  .get()
+                  .then((value) async {
+                if (value.size > 0) {
+                  setState(() {
+                    studentRegistered11 = true;
+                  });
+                } else {
+                  setState(() {
+                    studentRegistered11 = false;
+                  });
+                }
+                setState(() {
+                  loadedData = true;
+                });
+              });
+
+              break;
+
+            case "12":
+              await FirebaseFirestore.instance
+                  .collection("Admin")
+                  .doc("First Year")
+                  .collection("Second Semester")
+                  .get()
+                  .then((value) async {
+                if (value.size > 0) {
+                  setState(() {
+                    studentRegistered12 = true;
+                  });
+                } else {
+                  setState(() {
+                    studentRegistered12 = false;
+                  });
+                }
+                setState(() {
+                  loadedData = true;
+                });
+              });
+              break;
+
+            case "21":
+              await FirebaseFirestore.instance
+                  .collection("Admin")
+                  .doc("Second Year")
+                  .collection("First Semester")
+                  .get()
+                  .then((value) async {
+                if (value.size > 0) {
+                  setState(() {
+                    studentRegistered21 = true;
+                  });
+                } else {
+                  setState(() {
+                    studentRegistered21 = false;
+                  });
+                }
+                setState(() {
+                  loadedData = true;
+                });
+              });
+              break;
+
+            case "22":
+              await FirebaseFirestore.instance
+                  .collection("Admin")
+                  .doc("Second Year")
+                  .collection("Second Semester")
+                  .get()
+                  .then((value) async {
+                if (value.size > 0) {
+                  setState(() {
+                    studentRegistered22 = true;
+                  });
+                } else {
+                  setState(() {
+                    studentRegistered22 = false;
+                  });
+                }
+                setState(() {
+                  loadedData = true;
+                });
+              });
+              break;
+
+            case "31":
+              await FirebaseFirestore.instance
+                  .collection("Admin")
+                  .doc("Third Year")
+                  .collection("First Semester")
+                  .get()
+                  .then((value) async {
+                if (value.size > 0) {
+                  setState(() {
+                    studentRegistered31 = true;
+                  });
+                } else {
+                  setState(() {
+                    studentRegistered31 = false;
+                  });
+                }
+                setState(() {
+                  loadedData = true;
+                });
+              });
+              break;
+
+            case "32":
+              await FirebaseFirestore.instance
+                  .collection("Admin")
+                  .doc("Third Year")
+                  .collection("Second Semester")
+                  .get()
+                  .then((value) async {
+                if (value.size > 0) {
+                  setState(() {
+                    studentRegistered32 = true;
+                  });
+                } else {
+                  setState(() {
+                    studentRegistered32 = false;
+                  });
+                }
+                setState(() {
+                  loadedData = true;
+                });
+              });
+              break;
+
+            case "41":
+              await FirebaseFirestore.instance
+                  .collection("Admin")
+                  .doc("Fourth Year")
+                  .collection("First Semester")
+                  .get()
+                  .then((value) async {
+                if (value.size > 0) {
+                  setState(() {
+                    studentRegistered41 = true;
+                  });
+                } else {
+                  setState(() {
+                    studentRegistered41 = false;
+                  });
+                }
+                setState(() {
+                  loadedData = true;
+                });
+              });
+              break;
+
+            case "42":
+              await FirebaseFirestore.instance
+                  .collection("Admin")
+                  .doc("Fourth Year")
+                  .collection("Second Semester")
+                  .get()
+                  .then((value) async {
+                if (value.size > 0) {
+                  setState(() {
+                    studentRegistered42 = true;
+                  });
+                } else {
+                  setState(() {
+                    studentRegistered42 = false;
+                  });
+                }
+                setState(() {
+                  loadedData = true;
+                });
+              });
+              break;
+          }
           currentScreen(item);
 
           // if (item.route != null) {
           //   Navigator.of(context).pushNamed(item.route!);
           // }
         },
-        selectedRoute: "11",
-        // footer: Container(
-        //   height: 50,
-        //   width: double.infinity,
-        //   color: const Color(0xff444444),
-        //   child: const Center(
-        //     child: Text(
-        //       'footer',
-        //       style: TextStyle(
-        //         color: Colors.white,
-        //       ),
-        //     ),
-        //   ),
-        // ),
+        selectedRoute: "",
       ),
-      body: _selectedScreen,
+      body: loadedData == true
+          ? _selectedScreen
+          : const CircularProgressIndicator(),
     );
   }
 }

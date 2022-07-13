@@ -424,7 +424,7 @@ class _StudentRegisterState extends State<StudentRegister> {
         "mobile": mobile.text,
         "faculty": faculty.text,
         "registrationNumber": registrationNumber.text,
-        "indexNumber": indexNumber.toString(),
+        "indexNumber": indexNumber.text.toString(),
         "uid": firebaseUser.uid,
         "type":"student"
       });

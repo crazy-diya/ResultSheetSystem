@@ -1,10 +1,18 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:result_sheet_system/core/utils/app_colors.dart';
+import 'package:result_sheet_system/features/data/datasources/dataSources.dart';
 import 'package:result_sheet_system/features/presentation/views/student_panel/student_home.dart';
 import 'package:result_sheet_system/features/presentation/widgets/default_button.dart';
 
 class AddResults extends StatefulWidget {
-  const AddResults({Key? key}) : super(key: key);
+  String? indexNumber;
+  String? uId;
+  String? semester;
+  String? year;
+
+  AddResults({this.indexNumber, this.uId, this.semester, this.year, Key? key})
+      : super(key: key);
 
   @override
   State<AddResults> createState() => _AddResultsState();
@@ -15,8 +23,9 @@ class _AddResultsState extends State<AddResults> {
   List<Widget> _children = [];
   int _count = 0;
   List<TextEditingController> controllerSubCodeList = [];
+  List<String> subjectList = [];
 
-  void _add() {
+  void _add(String subjectName) {
     controllerSubCodeList = List.from(controllerSubCodeList)
       ..add(TextEditingController());
 
@@ -29,10 +38,10 @@ class _AddResultsState extends State<AddResults> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  const Text(
-                    "Subject Code : ",
-                    style:
-                        TextStyle(color: AppColors.wPrimaryColor, fontSize: 15),
+                  Text(
+                    subjectName,
+                    style: const TextStyle(
+                        color: AppColors.wPrimaryColor, fontSize: 15),
                   ),
                   SizedBox(
                     width: 200,
@@ -78,9 +87,23 @@ class _AddResultsState extends State<AddResults> {
 
   @override
   initState() {
-    for (var i = 0; i < 13; i++) {
-      _add();
-    }
+    print(widget.year);
+    print(widget.semester);
+    print(widget.uId);
+    print(widget.indexNumber);
+
+    Database.firestoreStudent
+        .doc(widget.uId)
+        .collection(widget.year.toString())
+        .doc(widget.semester.toString())
+        .get()
+        .then((value) async {
+      subjectList = List.from(await value.get("SubjectCodes"));
+
+      for (int i = 0; i < subjectList.length; i++) {
+        _add(subjectList[i]);
+      }
+    });
   }
 
   @override
@@ -94,9 +117,9 @@ class _AddResultsState extends State<AddResults> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Text(
-                "ICT114 the Input Results to First Year First Semester",
-                style: TextStyle(
+               Text(
+                "${widget.indexNumber} the Input Results to First Year First Semester",
+                style: const TextStyle(
                   fontSize: 32,
                   fontWeight: FontWeight.bold,
                   color: AppColors.wPrimaryColor,
@@ -170,17 +193,59 @@ class _AddResultsState extends State<AddResults> {
                   title: "Submit Results",
                   fontSize: 24,
                   click: () {
-                    // if(_formKey.currentState!.validate()){
-                    //
-                    // }
-                    Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => StudentHome(),
-                    ));
+                    if (_formKey.currentState!.validate()) {
+                      storeSubjectList();
+                      Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => StudentHome(),
+                      ));
+                    }
                   })
             ],
           ),
         ),
       ),
     );
+  }
+
+  storeSubjectList() async {
+    var resultList = [];
+
+    for (var x in controllerSubCodeList) {
+      resultList.add(x.text);
+    }
+
+    var docRef = FirebaseFirestore.instance
+        .collection("Student")
+        .doc(widget.uId)
+        .collection(widget.year.toString())
+        .doc(widget.semester.toString());
+    // var adminRef = FirebaseFirestore.instance
+    //     .collection("Student")
+    //     .doc(AppUser.appUser!.uid)
+    //     .collection(widget.year.toString())
+    //     .doc(widget.semester.toString());
+
+    docRef.get().then((value) async {
+      if (value["SubjectResult"].exists) {
+        await Database.firestoreStudent
+            .doc(widget.uId)
+            .collection(widget.year.toString())
+            .doc(widget.semester.toString())
+            .update({"SubjectResult": resultList});
+      } else {
+        await Database.firestoreStudent
+            .doc(widget.uId)
+            .collection(widget.year.toString())
+            .doc(widget.semester.toString())
+            .update({"SubjectResult": resultList});
+      }
+    });
+    setState(() {
+      resultList.remove(true);
+      controllerSubCodeList.clear();
+    });
+    Navigator.of(context).push(MaterialPageRoute(
+      builder: (context) => StudentHome(),
+    ));
   }
 }

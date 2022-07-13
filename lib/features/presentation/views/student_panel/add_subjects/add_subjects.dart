@@ -232,6 +232,11 @@ class _AddSubjectsState extends State<AddSubjects> {
         .doc(AppUser.appUser!.uid)
         .collection(widget.year.toString())
         .doc(widget.semester.toString());
+    // var adminRef = FirebaseFirestore.instance
+    //     .collection("Student")
+    //     .doc(AppUser.appUser!.uid)
+    //     .collection(widget.year.toString())
+    //     .doc(widget.semester.toString());
 
     docRef.get().then((value) async {
       if (value.exists) {
@@ -240,16 +245,27 @@ class _AddSubjectsState extends State<AddSubjects> {
             .collection(widget.year.toString())
             .doc(widget.semester.toString())
             .update({"SubjectCodes": subjectCodeList});
+        await Database.firestoreAdmin
+            .doc(widget.year.toString())
+            .collection(widget.semester.toString())
+            .doc(AppUser.appUser!.uid)
+            .update({"SubjectCodes": subjectCodeList});
         await Database.firestoreStudent
             .doc(AppUser.appUser!.uid)
             .collection(widget.year.toString())
             .doc(widget.semester.toString())
             .update({"SubjectNames": subjectNameList});
+
       } else {
         await Database.firestoreStudent
             .doc(AppUser.appUser!.uid)
             .collection(widget.year.toString())
             .doc(widget.semester.toString())
+            .set({"SubjectCodes": subjectCodeList});
+        await Database.firestoreAdmin
+            .doc(widget.year.toString())
+            .collection(widget.semester.toString())
+            .doc(AppUser.appUser!.uid)
             .set({"SubjectCodes": subjectCodeList});
         await Database.firestoreStudent
             .doc(AppUser.appUser!.uid)

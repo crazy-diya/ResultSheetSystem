@@ -28,7 +28,7 @@ class _SignInState extends State<SignIn> {
     var height = MediaQuery.of(context).size.height;
     var width = MediaQuery.of(context).size.width;
     email.text = "Dimuthu@gmail.com";
-    password.text="Dimuthu";
+    password.text = "Dimuthu";
     return Scaffold(
       body: SingleChildScrollView(
         scrollDirection: Axis.vertical,
@@ -286,13 +286,13 @@ class _SignInState extends State<SignIn> {
       await auth
           .signInWithEmailAndPassword(email: email, password: password)
           .then((value) {
-            AppUser.appUser = auth.currentUser;
-            debugPrint(AppUser.appUser!.email);
+        AppUser.appUser = auth.currentUser;
+        debugPrint(AppUser.appUser!.email);
         ScaffoldMessenger.of(context)
             .showSnackBar(const SnackBar(content: Text("Successfully Login!")));
         Navigator.of(context).pushAndRemoveUntil(
             MaterialPageRoute(
-              builder: (context) => const StudentHome(),
+              builder: (context) => const AdminHome(),
             ),
             (route) => false);
       }).onError((error, stackTrace) {
