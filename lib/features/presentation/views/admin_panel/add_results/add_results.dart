@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:result_sheet_system/core/utils/app_colors.dart';
 import 'package:result_sheet_system/features/data/datasources/dataSources.dart';
+import 'package:result_sheet_system/features/presentation/views/admin_panel/admin_home.dart';
 import 'package:result_sheet_system/features/presentation/views/student_panel/student_home.dart';
 import 'package:result_sheet_system/features/presentation/widgets/default_button.dart';
 
@@ -118,7 +119,7 @@ class _AddResultsState extends State<AddResults> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
                Text(
-                "${widget.indexNumber} the Input Results to First Year First Semester",
+                "${widget.indexNumber} the Input Results to ${widget.year} ${widget.semester}",
                 style: const TextStyle(
                   fontSize: 32,
                   fontWeight: FontWeight.bold,
@@ -195,9 +196,9 @@ class _AddResultsState extends State<AddResults> {
                   click: () {
                     if (_formKey.currentState!.validate()) {
                       storeSubjectList();
-                      Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => StudentHome(),
-                      ));
+                      // Navigator.of(context).push(MaterialPageRoute(
+                      //   builder: (context) => const AdminHome(),
+                      // ));
                     }
                   })
             ],
@@ -219,33 +220,20 @@ class _AddResultsState extends State<AddResults> {
         .doc(widget.uId)
         .collection(widget.year.toString())
         .doc(widget.semester.toString());
-    // var adminRef = FirebaseFirestore.instance
-    //     .collection("Student")
-    //     .doc(AppUser.appUser!.uid)
-    //     .collection(widget.year.toString())
-    //     .doc(widget.semester.toString());
-
     docRef.get().then((value) async {
-      if (value["SubjectResult"].exists) {
         await Database.firestoreStudent
             .doc(widget.uId)
             .collection(widget.year.toString())
             .doc(widget.semester.toString())
             .update({"SubjectResult": resultList});
-      } else {
-        await Database.firestoreStudent
-            .doc(widget.uId)
-            .collection(widget.year.toString())
-            .doc(widget.semester.toString())
-            .update({"SubjectResult": resultList});
-      }
+
     });
     setState(() {
       resultList.remove(true);
       controllerSubCodeList.clear();
     });
     Navigator.of(context).push(MaterialPageRoute(
-      builder: (context) => StudentHome(),
+      builder: (context) => const AdminHome(),
     ));
   }
 }

@@ -27,8 +27,8 @@ class _SignInState extends State<SignIn> {
   Widget build(BuildContext context) {
     var height = MediaQuery.of(context).size.height;
     var width = MediaQuery.of(context).size.width;
-    email.text = "Dimuthu@gmail.com";
-    password.text = "Dimuthu";
+    // email.text = "Dimuthu@gmail.com";
+    // password.text = "Dimuthu";
     return Scaffold(
       body: SingleChildScrollView(
         scrollDirection: Axis.vertical,
@@ -234,7 +234,8 @@ class _SignInState extends State<SignIn> {
                               // ));
 
                               if (_formKey.currentState!.validate()) {
-                                User? user = await loginUsingEmailPassword(
+                                const CircularProgressIndicator();
+                                await loginUsingEmailPassword(
                                   email: email.text.trim(),
                                   password: password.text.trim(),
                                   context: context,
@@ -292,7 +293,7 @@ class _SignInState extends State<SignIn> {
             .showSnackBar(const SnackBar(content: Text("Successfully Login!")));
         Navigator.of(context).pushAndRemoveUntil(
             MaterialPageRoute(
-              builder: (context) => const AdminHome(),
+              builder: (context) => _dropDownValue == "Student" ? const StudentHome(): const AdminHome(),
             ),
             (route) => false);
       }).onError((error, stackTrace) {

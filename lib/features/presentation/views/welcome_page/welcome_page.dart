@@ -22,7 +22,6 @@ class _WelcomePageState extends State<WelcomePage> {
       body: SingleChildScrollView(
         scrollDirection: Axis.vertical,
         child: Center(
-
           child: Padding(
             padding: const EdgeInsets.only(bottom: 100.0,top: 25),
             child: Column(
