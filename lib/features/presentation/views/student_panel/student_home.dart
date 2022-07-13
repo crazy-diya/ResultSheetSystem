@@ -5,29 +5,33 @@ import 'package:flutter_admin_scaffold/admin_scaffold.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:result_sheet_system/core/utils/app_colors.dart';
+import 'package:result_sheet_system/features/data/datasources/dataSources.dart';
 import 'package:result_sheet_system/features/presentation/views/admin_panel/student_list/student_list.dart';
 import 'package:result_sheet_system/features/presentation/views/sign_in/sign_in.dart';
+import 'package:result_sheet_system/features/presentation/views/student_panel/add_subjects/add_subjects.dart';
+import 'package:result_sheet_system/features/presentation/views/student_panel/check_results/check_results.dart';
 
-class AdminHome extends StatefulWidget {
+class StudentHome extends StatefulWidget {
   static const String id = "admin_home";
 
-  const AdminHome({Key? key}) : super(key: key);
+  const StudentHome({Key? key}) : super(key: key);
 
   @override
-  State<AdminHome> createState() => _AdminHomeState();
+  State<StudentHome> createState() => _StudentHomeState();
 }
 
-class _AdminHomeState extends State<AdminHome> {
-  bool studentRegistered11 = false;
-  bool studentRegistered12 = false;
-  bool studentRegistered21 = false;
-  bool studentRegistered22 = false;
-  bool studentRegistered31 = false;
-  bool studentRegistered32 = false;
-  bool studentRegistered41 = false;
-  bool studentRegistered42 = false;
+class _StudentHomeState extends State<StudentHome> {
+  bool fillSubjects11 = false;
+  bool fillSubjects12 = false;
+  bool fillSubjects21 = false;
+  bool fillSubjects22 = false;
+  bool fillSubjects31 = false;
+  bool fillSubjects32 = false;
+  bool fillSubjects41 = false;
+  bool fillSubjects42 = false;
 
-  bool loadedData = true;
+  bool fillSubject = true;
+
   Widget _selectedScreen = const Center(
     child: Text("Go and Find!"),
   );
@@ -36,66 +40,58 @@ class _AdminHomeState extends State<AdminHome> {
     switch (item.route) {
       case "11":
         setState(() {
-          _selectedScreen = studentRegistered11 == true
-              ? const StudentList(
-                  year: "First Year", semester: "First Semester")
-              : const Center(child: Text("Not Student Registered Yet!"));
+          _selectedScreen = fillSubjects11 == true
+              ? CheckResults(year: "First Year", semester: "First Semester")
+              : AddSubjects(year: "First Year", semester: "First Semester");
         });
         break;
       case "12":
         setState(() {
-          _selectedScreen = studentRegistered12 == true
-              ? const StudentList(
-                  year: "First Year", semester: "Second Semester")
-              : const Center(child: Text("Not Student Registered Yet!"));
+          _selectedScreen = fillSubjects12 == true
+              ? CheckResults(year: "First Year", semester: "Second Semester")
+              : AddSubjects(year: "First Year", semester: "Second Semester");
         });
         break;
       case "21":
         setState(() {
-          _selectedScreen = studentRegistered21 == true
-              ? const StudentList(
-                  year: "Second Year", semester: "First Semester")
-              : const Center(child: Text("Not Student Registered Yet!"));
+          _selectedScreen = fillSubjects21 == true
+              ? CheckResults(year: "Second Year", semester: "First Semester")
+              : AddSubjects(year: "Second Year", semester: "First Semester");
         });
         break;
       case "22":
         setState(() {
-          _selectedScreen = studentRegistered22 == true
-              ? const StudentList(
-                  year: "Second Year", semester: "Second Semester")
-              : const Center(child: Text("Not Student Registered Yet!"));
+          _selectedScreen = fillSubjects22 == true
+              ? CheckResults(year: "Second Year", semester: "Second Semester")
+              : AddSubjects(year: "Second Year", semester: "Second Semester");
         });
         break;
       case "31":
         setState(() {
-          _selectedScreen = studentRegistered31 == true
-              ? const StudentList(
-                  year: "Third Year", semester: "First Semester")
-              : const Center(child: Text("Not Student Registered Yet!"));
+          _selectedScreen = fillSubjects31 == true
+              ? CheckResults(year: "Third Year", semester: "First Semester")
+              : AddSubjects(year: "Third Year", semester: "First Semester");
         });
         break;
       case "32":
         setState(() {
-          _selectedScreen = studentRegistered32 == true
-              ? const StudentList(
-                  year: "Third Year", semester: "Second Semester")
-              : const Center(child: Text("Not Student Registered Yet!"));
+          _selectedScreen = fillSubjects32 == true
+              ? CheckResults(year: "Third Year", semester: "Second Semester")
+              : AddSubjects(year: "Third Year", semester: "Second Semester");
         });
         break;
       case "41":
         setState(() {
-          _selectedScreen = studentRegistered41 == true
-              ? const StudentList(
-                  year: "Fourth Year", semester: "First Semester")
-              : const Center(child: Text("Not Student Registered Yet!"));
+          _selectedScreen = fillSubjects41 == true
+              ? CheckResults(year: "Fourth Year", semester: "First Semester")
+              : AddSubjects(year: "Fourth Year", semester: "First Semester");
         });
         break;
       case "42":
         setState(() {
-          _selectedScreen = studentRegistered42 == true
-              ? const StudentList(
-                  year: "Fourth Year", semester: "Second Semester")
-              : const Center(child: Text("Not Student Registered Yet!"));
+          _selectedScreen = fillSubjects42 == true
+              ? CheckResults(year: "Fourth Year", semester: "Second Semester")
+              : AddSubjects(year: "Fourth Year", semester: "Second Semester");
         });
         break;
     }
@@ -106,7 +102,7 @@ class _AdminHomeState extends State<AdminHome> {
     return AdminScaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        title: const Text('ADMIN PANEL'),
+        title: const Text('STUDENT PANEL'),
         titleTextStyle: GoogleFonts.playfairDisplay(
           fontSize: 32,
           fontWeight: FontWeight.bold,
@@ -191,28 +187,28 @@ class _AdminHomeState extends State<AdminHome> {
             ),
           ]),
         ],
+        selectedRoute: "",
         onSelected: (item) async {
-          currentScreen(item);
-
           switch (item.route) {
             case "11":
               await FirebaseFirestore.instance
-                  .collection("Admin")
-                  .doc("First Year")
-                  .collection("First Semester")
+                  .collection("Student")
+                  .doc(AppUser.appUser!.uid)
+                  .collection("First Year")
+                  .doc("First Semester")
                   .get()
                   .then((value) async {
-                if (value.size > 0) {
+                if (value.exists) {
                   setState(() {
-                    studentRegistered11 = true;
+                    fillSubjects11 = true;
                   });
                 } else {
                   setState(() {
-                    studentRegistered11 = false;
+                    fillSubjects11 = false;
                   });
                 }
                 setState(() {
-                  loadedData = true;
+                  fillSubject = true;
                 });
               });
 
@@ -220,167 +216,169 @@ class _AdminHomeState extends State<AdminHome> {
 
             case "12":
               await FirebaseFirestore.instance
-                  .collection("Admin")
-                  .doc("First Year")
-                  .collection("Second Semester")
+                  .collection("Student")
+                  .doc(AppUser.appUser!.uid)
+                  .collection("First Year")
+                  .doc("Second Semester")
                   .get()
                   .then((value) async {
-                if (value.size > 0) {
+                if (value.exists) {
                   setState(() {
-                    studentRegistered12 = true;
+                    fillSubjects12 = true;
                   });
                 } else {
                   setState(() {
-                    studentRegistered12 = false;
+                    fillSubjects12 = false;
                   });
                 }
                 setState(() {
-                  loadedData = true;
+                  fillSubject = true;
                 });
               });
               break;
 
             case "21":
               await FirebaseFirestore.instance
-                  .collection("Admin")
-                  .doc("Second Year")
-                  .collection("First Semester")
+                  .collection("Student")
+                  .doc(AppUser.appUser!.uid)
+                  .collection("Second Year")
+                  .doc("First Semester")
                   .get()
                   .then((value) async {
-                if (value.size > 0) {
+                if (value.exists) {
                   setState(() {
-                    studentRegistered21 = true;
+                    fillSubjects21 = true;
                   });
                 } else {
                   setState(() {
-                    studentRegistered21 = false;
+                    fillSubjects21 = false;
                   });
                 }
                 setState(() {
-                  loadedData = true;
+                  fillSubject = true;
                 });
               });
               break;
 
             case "22":
               await FirebaseFirestore.instance
-                  .collection("Admin")
-                  .doc("Second Year")
-                  .collection("Second Semester")
+                  .collection("Student")
+                  .doc(AppUser.appUser!.uid)
+                  .collection("Second Year")
+                  .doc("Second Semester")
                   .get()
                   .then((value) async {
-                if (value.size > 0) {
+                if (value.exists) {
                   setState(() {
-                    studentRegistered22 = true;
+                    fillSubjects22 = true;
                   });
                 } else {
                   setState(() {
-                    studentRegistered22 = false;
+                    fillSubjects22 = false;
                   });
                 }
                 setState(() {
-                  loadedData = true;
+                  fillSubject = true;
                 });
               });
               break;
 
             case "31":
               await FirebaseFirestore.instance
-                  .collection("Admin")
-                  .doc("Third Year")
-                  .collection("First Semester")
+                  .collection("Student")
+                  .doc(AppUser.appUser!.uid)
+                  .collection("Third Year")
+                  .doc("First Semester")
                   .get()
                   .then((value) async {
-                if (value.size > 0) {
+                if (value.exists) {
                   setState(() {
-                    studentRegistered31 = true;
+                    fillSubjects31 = true;
                   });
                 } else {
                   setState(() {
-                    studentRegistered31 = false;
+                    fillSubjects31 = false;
                   });
                 }
                 setState(() {
-                  loadedData = true;
+                  fillSubject = true;
                 });
               });
               break;
 
             case "32":
               await FirebaseFirestore.instance
-                  .collection("Admin")
-                  .doc("Third Year")
-                  .collection("Second Semester")
+                  .collection("Student")
+                  .doc(AppUser.appUser!.uid)
+                  .collection("Third Year")
+                  .doc("Second Semester")
                   .get()
                   .then((value) async {
-                if (value.size > 0) {
+                if (value.exists) {
                   setState(() {
-                    studentRegistered32 = true;
+                    fillSubjects32 = true;
                   });
                 } else {
                   setState(() {
-                    studentRegistered32 = false;
+                    fillSubjects32 = false;
                   });
                 }
                 setState(() {
-                  loadedData = true;
+                  fillSubject = true;
                 });
               });
               break;
 
             case "41":
               await FirebaseFirestore.instance
-                  .collection("Admin")
-                  .doc("Fourth Year")
-                  .collection("First Semester")
+                  .collection("Student")
+                  .doc(AppUser.appUser!.uid)
+                  .collection("Fourth Year")
+                  .doc("First Semester")
                   .get()
                   .then((value) async {
-                if (value.size > 0) {
+                if (value.exists) {
                   setState(() {
-                    studentRegistered41 = true;
+                    fillSubjects41 = true;
                   });
                 } else {
                   setState(() {
-                    studentRegistered41 = false;
+                    fillSubjects41 = false;
                   });
                 }
                 setState(() {
-                  loadedData = true;
+                  fillSubject = true;
                 });
               });
               break;
 
             case "42":
               await FirebaseFirestore.instance
-                  .collection("Admin")
-                  .doc("Fourth Year")
-                  .collection("Second Semester")
+                  .collection("Student")
+                  .doc(AppUser.appUser!.uid)
+                  .collection("Fourth Year")
+                  .doc("Second Semester")
                   .get()
                   .then((value) async {
-                if (value.size > 0) {
+                if (value.exists) {
                   setState(() {
-                    studentRegistered42 = true;
+                    fillSubjects42 = true;
                   });
                 } else {
                   setState(() {
-                    studentRegistered42 = false;
+                    fillSubjects42 = false;
                   });
                 }
                 setState(() {
-                  loadedData = true;
+                  fillSubject = true;
                 });
               });
               break;
           }
           currentScreen(item);
-
-          // if (item.route != null) {
-          //   Navigator.of(context).pushNamed(item.route!);
-          // }
         },
-        selectedRoute: "",
       ),
-      body: loadedData == true
+      body: fillSubject == true
           ? _selectedScreen
           : const CircularProgressIndicator(),
     );

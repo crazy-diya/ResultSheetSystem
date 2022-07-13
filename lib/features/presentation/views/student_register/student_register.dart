@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:result_sheet_system/core/utils/app_colors.dart';
 import 'package:result_sheet_system/features/presentation/views/sign_in/sign_in.dart';
 import 'package:result_sheet_system/features/presentation/widgets/default_button.dart';
@@ -39,6 +40,10 @@ class _StudentRegisterState extends State<StudentRegister> {
             child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            Padding(
+              padding: const EdgeInsets.only(bottom: 80.0),
+              child: SvgPicture.asset("assets/images/seu_logo.svg", width: 200),
+            ),
             const Text(
               "REGISTRATION FORM FOR\nSTUDENT",
               style: TextStyle(
@@ -419,7 +424,7 @@ class _StudentRegisterState extends State<StudentRegister> {
         "mobile": mobile.text,
         "faculty": faculty.text,
         "registrationNumber": registrationNumber.text,
-        "indexNumber": indexNumber.toString(),
+        "indexNumber": indexNumber.text.toString(),
         "uid": firebaseUser.uid,
         "type":"student"
       });
